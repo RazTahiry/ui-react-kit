@@ -9,7 +9,7 @@ export const Tooltip = ({ children, text, position = "top" }) => {
   };
 
   return (
-    <div className="relative group inline-block">
+    <div className="relative group inline-block h-fit">
       {children}
       <div
         className={`absolute opacity-0 group-hover:opacity-100 transition z-50 bg-gray-700 text-white text-xs px-2 py-1 rounded pointer-events-none whitespace-nowrap ${positions[position]}`}

@@ -10,13 +10,15 @@ const VARIANTS = {
 };
 
 export const Button = ({
-  children,
   variant = "primary",
   disabled = false,
   loading = false,
   onClick,
   type = "button",
   className = "",
+  children,
+  icon = null,
+  iconPosition = "left",
 }) => {
   return (
     <button
@@ -24,7 +26,7 @@ export const Button = ({
       disabled={disabled || loading}
       onClick={onClick}
       className={classNames(
-        "relative px-4 py-2 rounded font-medium text-sm transition-all duration-300 ease-in-out focus:outline-none",
+        "relative p-2 rounded font-medium text-sm transition-all duration-300 ease-in-out focus:outline-none",
         VARIANTS[variant] ?? VARIANTS.primary,
         { "opacity-50 cursor-not-allowed": disabled || loading },
         { "cursor-pointer": !disabled && !loading },
@@ -61,7 +63,13 @@ export const Button = ({
         </div>
       )}
 
-      <span className={loading ? "invisible" : "visible"}>{children}</span>
+      {!loading && (
+        <span className="flex items-center gap-2">
+          {icon && iconPosition === "left" && <span>{icon}</span>}
+          {children && <span>{children}</span>}
+          {icon && iconPosition === "right" && <span>{icon}</span>}
+        </span>
+      )}
     </button>
   );
 };

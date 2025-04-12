@@ -11,6 +11,9 @@ import { Tooltip } from "./components/Tooltip";
 import { Modal } from "./components/Modal";
 import { Toast } from "./components/Toast";
 import { SkeletonLoader } from "./components/SkeletonLoader";
+import { Table } from "./components/Table";
+import { Card } from "./components/Card";
+import { Dropdown } from "./components/Dropdown";
 
 const Section = ({ title, description, children, code }) => {
   const [copied, setCopied] = useState(false);
@@ -25,12 +28,46 @@ const Section = ({ title, description, children, code }) => {
       <h2 className="text-lg font-semibold">{title}</h2>
       <p className="text-sm text-gray-600">{description}</p>
       <div className="pt-2">{children}</div>
-      <pre className="bg-gray-100 text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap">
+      <pre className="relative bg-gray-100 text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap">
         <code>{code}</code>
+        <Button
+          onClick={handleCopy}
+          variant="outline"
+          icon={
+            copied ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            )
+          }
+          className="!absolute top-2 right-2 text-xs"
+        />
       </pre>
-      <Button onClick={handleCopy} variant="outline">
-        {copied ? "Copié !" : "Copier le code"}
-      </Button>
     </div>
   );
 };
@@ -44,6 +81,31 @@ function App() {
   const [newsletter, setNewsletter] = useState(false);
   const [country, setCountry] = useState("");
 
+  const columns = [
+    { label: "Nom", accessor: "name" },
+    {
+      label: "Statut",
+      accessor: "status",
+      align: "right",
+      render: (row) => (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+            row.status === "Actif"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {row.status}
+        </span>
+      ),
+    },
+  ];
+
+  const data = [
+    { name: "Alice", status: "Actif" },
+    { name: "Bob", status: "Inactif" },
+  ];
+
   return (
     <div className="min-h-screen p-6 bg-gray-100 space-y-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-center">
@@ -55,9 +117,58 @@ function App() {
         description="Utilisé pour indiquer un chargement en cours."
         code={`<SkeletonLoader width="w-3/4" height="h-5" />`}
       >
-        <SkeletonLoader width="w-24" height="h-24" rounded="rounded-full" />
-        <SkeletonLoader width="w-3/4" height="h-5" />
-        <SkeletonLoader width="w-1/2" height="h-4" />
+        <SkeletonLoader
+          width="w-24"
+          height="h-24"
+          rounded="rounded-full"
+          className="mb-1"
+        />
+        <SkeletonLoader width="w-3/4" height="h-5" className="mb-1" />
+        <SkeletonLoader width="w-1/2" height="h-4" className="mb-1" />
+      </Section>
+
+      <Section
+        title="Table"
+        description="Tableau de données."
+        code={`<Table columns={[{ label: 'Nom', accessor: 'name' }]} data={[{ name: 'John Doe' }]} />`}
+      >
+        <Table columns={columns} data={data} />
+      </Section>
+
+      <Section
+        title="Card"
+        description="Carte d'information."
+        code={`<Card title="Titre"><p>Contenu de la carte</p></Card>`}
+      >
+        <Card title="Profil utilisateur" footer="Mis à jour il y a 2 jours">
+          <p>Nom : Jean Dupont</p>
+          <p>Email : jean@example.com</p>
+        </Card>
+      </Section>
+
+      <Section
+        title="Dropdown"
+        description="Menu déroulant."
+        code={`<Dropdown trigger={<Button>Menu</Button>}>\n  <p>Option 1</p>\n  <p>Option 2</p>\n</Dropdown>`}
+      >
+        <Dropdown
+          trigger={
+            <button className="bg-gray-200 px-3 py-1 rounded">Ouvrir</button>
+          }
+          position="bottom"
+        >
+          <ul className="space-y-1">
+            <li className="hover:bg-gray-100 p-2 cursor-pointer transition duration-300">
+              Profil
+            </li>
+            <li className="hover:bg-gray-100 p-2 cursor-pointer transition duration-300">
+              Paramètres
+            </li>
+            <li className="hover:bg-gray-100 p-2 cursor-pointer transition duration-300">
+              Déconnexion
+            </li>
+          </ul>
+        </Dropdown>
       </Section>
 
       <Section
@@ -117,6 +228,8 @@ function App() {
         <InputSelect
           label="Pays"
           value={country}
+          searchable={true}
+          multiple={true}
           onChange={setCountry}
           options={[
             { label: "France", value: "fr" },
@@ -144,7 +257,28 @@ function App() {
         code={`<Tooltip text="Ouvre le modal"><Button>Ouvrir Modal</Button></Tooltip>`}
       >
         <Tooltip text="Clique ici pour ouvrir un modal">
-          <Button onClick={() => setIsModalOpen(true)}>Ouvrir Modal</Button>
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            }
+            iconPosition="left"
+          >
+            Ouvrir Modal
+          </Button>
         </Tooltip>
       </Section>
 
@@ -155,7 +289,7 @@ function App() {
       >
         <Button
           variant="primary"
-          loading={true}
+          loading={false}
           onClick={() =>
             setToast({ message: "Formulaire envoyé !", type: "success" })
           }

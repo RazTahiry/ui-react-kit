@@ -49,9 +49,14 @@ export const Toast = ({
         ${visible ? "opacity-100" : "opacity-0"} 
         ${colors[type] ?? "bg-gray-500"} 
         ${positions[position] ?? "top-5 right-5"}`}
-      onClick={onClose}
     >
       {message}
+      <button
+        onClick={onClose}
+        className="ml-5 text-white text-semibold cursor-pointer"
+      >
+        ✕
+      </button>
     </div>
   );
 };

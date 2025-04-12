@@ -28,45 +28,46 @@ const Section = ({ title, description, children, code }) => {
       <h2 className="text-lg font-semibold">{title}</h2>
       <p className="text-sm text-gray-600">{description}</p>
       <div className="pt-2">{children}</div>
-      <pre className="relative bg-gray-100 text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap">
-        <code>{code}</code>
-        <Button
-          onClick={handleCopy}
-          variant="outline"
-          icon={
-            copied ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-            )
-          }
-          className="!absolute top-2 right-2 text-xs"
-        />
+      <pre className="flex justify-between bg-gray-100 text-sm p-3 rounded overflow-x-auto whitespace-pre-wrap">
+        <code className="flex flex-grow">{code}</code>
+        <Tooltip text={copied ? "Copié !" : "Copier le code"} position="left">
+          <Button
+            onClick={handleCopy}
+            variant="outline"
+            icon={
+              copied ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              )
+            }
+          />
+        </Tooltip>
       </pre>
     </div>
   );
